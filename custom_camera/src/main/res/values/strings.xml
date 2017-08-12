@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">身份布控</string>
+
+    <!--custom camera-->
+    <string name="custom_camera_capture_note">请对准人脸</string>
+    <string name="similarity_txt">相似度</string>
+</resources>

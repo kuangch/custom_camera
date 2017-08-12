@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/darker_gray"
+                tools:context="com.dilusense.custom_camera.PreviewActivity">
+
+    <ImageView
+        android:id="@+id/id_iv_preview_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:scaleType="fitCenter"/>
+
+
+    <ImageView
+        android:id="@+id/id_iv_cancel"
+        android:layout_width="@dimen/custom_camera_btn_save_cancel_wh"
+        android:layout_height="@dimen/custom_camera_btn_save_cancel_wh"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="40dp"
+        />
+
+    <ImageView
+        android:id="@+id/id_iv_ok"
+        android:layout_width="@dimen/custom_camera_btn_save_cancel_wh"
+        android:layout_height="@dimen/custom_camera_btn_save_cancel_wh"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="40dp"
+        />
+</RelativeLayout>

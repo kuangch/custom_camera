@@ -1,0 +1,34 @@
+<resources>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    
+
+
+    <!--custom camera-->
+    <dimen name="custom_camera_options_btn_h">100dip</dimen>
+    <dimen name="custom_camera_btn_capture_wh">70dip</dimen>
+    <dimen name="custom_camera_btn_back_wh">40dip</dimen>
+    <dimen name="custom_camera_btn_config_wh">80dip</dimen>
+    <dimen name="custom_camera_btn_save_cancel_wh">70dip</dimen>
+    <dimen name="custom_camera_btn_capture_back_distance">60dip</dimen>
+    <dimen name="custom_camera_capture_note_font_size">18sp</dimen>
+    <dimen name="custom_camera_save_cancel_margin">50dip</dimen>
+
+    <!--layout title-->
+    <dimen name="layout_title_text_size">20sp</dimen>
+    <dimen name="layout_title_height">50dip</dimen>
+    <dimen name="layout_title_left_w">60dip</dimen>
+    <dimen name="layout_title_left_margin_l">15dip</dimen>
+    <dimen name="layout_title_left_icon_w">20dip</dimen>
+    <dimen name="layout_title_left_icon_h">30dip</dimen>
+
+    <!--common-->
+    <dimen name="font_size_tiny">12sp</dimen>
+    <dimen name="font_size_min">14sp</dimen>
+    <dimen name="font_size_micro">16sp</dimen>
+    <dimen name="font_size_small">18sp</dimen>
+    <dimen name="font_size_medium">20sp</dimen>
+
+</resources>
