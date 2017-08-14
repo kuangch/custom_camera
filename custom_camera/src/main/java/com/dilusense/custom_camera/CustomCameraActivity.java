@@ -34,7 +34,7 @@ import rx.functions.Func1;
 /**
  * 遇到的问题：显示相机SurfaceView尺寸，相机预览尺寸 和 相机保存图片尺寸 三者不一致
  */
-public class CustomCameraActivity extends Activity implements Camera.PictureCallback, Camera.ShutterCallback {
+public class CustomCameraActivity extends Activity implements Camera.PictureCallback {
 
     public static final int RC_IS_CHOOSE_PICTURE = 2001;
 
@@ -327,11 +327,6 @@ public class CustomCameraActivity extends Activity implements Camera.PictureCall
         }).start();
 
         safeToTakePicture = true;
-    }
-
-    @Override
-    public void onShutter() {
-        Log.d("CameraSurfaceView", "CameraSurfaceView onShutter");
     }
 
     /**
