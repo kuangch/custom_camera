@@ -1,4 +1,4 @@
-package com.dilusense.custom_camera;
+package com.dilusense.custom_camera.utils;
 
 public class StringUtils {
     public static boolean isEmpty(Object obj) {

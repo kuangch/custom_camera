@@ -1,4 +1,4 @@
-package com.dilusense.custom_camera;
+package com.dilusense.custom_camera.utils;
 
 /**
  * Created by Thinkpad on 2017/3/13.

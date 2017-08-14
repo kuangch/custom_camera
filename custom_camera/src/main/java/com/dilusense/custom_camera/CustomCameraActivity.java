@@ -17,12 +17,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.badoo.mobile.util.WeakHandler;
+import com.dilusense.custom_camera.utils.BitmapUtils;
+import com.dilusense.custom_camera.utils.Utils;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.functions.Action1;
@@ -31,7 +34,7 @@ import rx.functions.Func1;
 /**
  * 遇到的问题：显示相机SurfaceView尺寸，相机预览尺寸 和 相机保存图片尺寸 三者不一致
  */
-public class CameraActivity extends Activity implements Camera.PictureCallback, Camera.ShutterCallback {
+public class CustomCameraActivity extends Activity implements Camera.PictureCallback, Camera.ShutterCallback {
 
     public static final int RC_IS_CHOOSE_PICTURE = 2001;
 
@@ -47,11 +50,11 @@ public class CameraActivity extends Activity implements Camera.PictureCallback, 
 
     private String flashMode =  Camera.Parameters.FLASH_MODE_OFF;
 
-    @BindView(R.id.id_iv_flash_switch)
+    @BindView(R2.id.id_iv_flash_switch)
     ImageView id_iv_flash_switch;
-    @BindView(R.id.iv_camera_face_frame)
+    @BindView(R2.id.iv_camera_face_frame)
     ImageView iv_camera_face_frame;
-    @BindView(R.id.id_iv_shutter)
+    @BindView(R2.id.id_iv_shutter)
     ImageView iv_shutter;
 
     @Override
@@ -71,13 +74,13 @@ public class CameraActivity extends Activity implements Camera.PictureCallback, 
 
 
         if (!Utils.checkCameraHardware(this)) {
-            Toast.makeText(CameraActivity.this, "设备没有摄像头", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CustomCameraActivity.this, "设备没有摄像头", Toast.LENGTH_SHORT).show();
             return;
         }
 
         handler = new WeakHandler();
 
-        // centerWindowView = findViewById(R.id.center_window_view);
+        // centerWindowView = findViewById(R2.id.center_window_view);
         Log.d("CameraSurfaceView", "CameraSurfaceView onCreate currentThread : " + Thread.currentThread());
         mPreview = (CameraPreview) findViewById(R.id.camera_preview);
 
@@ -86,19 +89,19 @@ public class CameraActivity extends Activity implements Camera.PictureCallback, 
     }
 
 
-    @OnClick(R.id.id_iv_shutter)
+    @OnClick(R2.id.id_iv_shutter)
     public void id_iv_shutterOnClick(){
         takePicture(null, null, this);
     }
-    @OnClick(R.id.id_iv_flash_switch)
+    @OnClick(R2.id.id_iv_flash_switch)
     public void id_iv_flash_switchOnClick(){
         toggleFlash();
     }
-    @OnClick(R.id.id_iv_change)
+    @OnClick(R2.id.id_iv_change)
     public void id_iv_changeOnClick(){
         changeCameraTwo();
     }
-    @OnClick(R.id.iv_back)
+    @OnClick(R2.id.iv_back)
     public void iv_backOnClick(){
         back();
     }
@@ -282,7 +285,7 @@ public class CameraActivity extends Activity implements Camera.PictureCallback, 
 //            p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);//持续的亮灯
 //            flashMode = Camera.Parameters.FLASH_MODE_TORCH;
 //            mCamera.setParameters(p);
-//            id_iv_flash_switch.setImageDrawable(getResources().getDrawable(R.mipmap.camera_flash_light));
+//            id_iv_flash_switch.setImageDrawable(getResources().getDrawable(R2.mipmap.camera_flash_light));
         } else {
             Toast.makeText(this, "Flash mode setting is not supported.", Toast.LENGTH_SHORT).show();
         }
@@ -357,9 +360,9 @@ public class CameraActivity extends Activity implements Camera.PictureCallback, 
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(CameraActivity.this, PreviewActivity.class);
+                Intent intent = new Intent(CustomCameraActivity.this, PreviewActivity.class);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, imgOutputUri);
-                CameraActivity.this.startActivityForResult(intent, RC_IS_CHOOSE_PICTURE);
+                CustomCameraActivity.this.startActivityForResult(intent, RC_IS_CHOOSE_PICTURE);
             }
         });
     }

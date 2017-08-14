@@ -8,7 +8,7 @@
 
         <!--custom camera-->
         <activity
-            android:name=".CameraActivity"
+            android:name=".CustomCameraActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
         <activity

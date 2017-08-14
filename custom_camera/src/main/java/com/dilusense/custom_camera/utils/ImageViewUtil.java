@@ -11,7 +11,7 @@
  * governing permissions and limitations under the License. 
  */
 
-package com.dilusense.custom_camera;
+package com.dilusense.custom_camera.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;

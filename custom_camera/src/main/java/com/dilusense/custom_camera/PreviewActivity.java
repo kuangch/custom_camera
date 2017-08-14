@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.dilusense.custom_camera.utils.BitmapUtils;
+import com.dilusense.custom_camera.utils.StringUtils;
 
 public class PreviewActivity extends Activity {
 
@@ -72,7 +74,7 @@ public class PreviewActivity extends Activity {
 
                 if (b != null) {
                     int saveW = b.getWidth();
-                    int saveH = Math.min(b.getHeight(), (int) (saveW * StringUtils.getWHRatio(MyConstants.CAPTURE_IMG_WH_RATIO, "/").getHeight() / StringUtils.getWHRatio(MyConstants.CAPTURE_IMG_WH_RATIO, "/").getWidth()));
+                    int saveH = Math.min(b.getHeight(), (int) (saveW * StringUtils.getWHRatio(CustomCameraConstants.CAPTURE_IMG_WH_RATIO, "/").getHeight() / StringUtils.getWHRatio(CustomCameraConstants.CAPTURE_IMG_WH_RATIO, "/").getWidth()));
                     Bitmap afterCropBitmap = Bitmap.createBitmap(b, 0, 0, saveW, saveH);
 
                     BitmapUtils.saveImageFile(act, filePath, afterCropBitmap);

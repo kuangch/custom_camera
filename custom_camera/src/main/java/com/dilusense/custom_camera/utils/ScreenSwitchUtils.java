@@ -1,4 +1,4 @@
-package com.dilusense.custom_camera;
+package com.dilusense.custom_camera.utils;
 
 import android.app.Activity;
 import android.content.Context;

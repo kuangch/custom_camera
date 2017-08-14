@@ -5,6 +5,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.dilusense.custom_camera.utils.BitmapUtils;
+
 /**
  * Created by Thinkpad on 2017/3/17.
  */
