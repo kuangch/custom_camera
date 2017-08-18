@@ -30,4 +30,5 @@ dependencies {
     compile 'io.reactivex:rxjava:1.2.1'
     compile project(':takephoto_library')
     compile project(':custom_camera')
+    compile project(':3d_model_view')
 }

@@ -11,6 +11,17 @@
         android:id="@+id/title"
         layout="@layout/layout_title"/>
     
+    <Button
+        android:id="@+id/btn_load_model"
+        android:text="@string/btn_load_model"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn_take_photo"
+        android:text="@string/btn_take_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <ImageView
         android:id="@+id/img"
         android:layout_width="200dip"
