@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.badoo.mobile.util.WeakHandler;
 import com.bumptech.glide.Glide;
+import com.dilusense.a3d_camera.Custom3DCamera;
 import com.dilusense.cameratest.base.BaseTakePhotoActivity;
 import com.dilusense.cameratest.utils.TakePhotoUtils;
 import com.dilusense.custom_camera.CustomCameraActivity;
@@ -37,6 +38,9 @@ public class MainActivity extends BaseTakePhotoActivity {
     @BindView(R.id.btn_take_photo)
     Button btn_take_photo;
 
+    @BindView(R.id.custom_3d_camera)
+    Button custom_ed_camera;
+
     WeakHandler handler = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,11 @@ public class MainActivity extends BaseTakePhotoActivity {
     @OnClick(R.id.btn_take_photo)
     public void btn_take_photoOnClick(){
         TakePhotoUtils.getTakePhoto(ctx).onPickFromCustomCapture(CaptureImgUtils.getCaptureImgFileUri(ctx),CustomCameraActivity.class);
+    }
+
+    @OnClick(R.id.custom_3d_camera)
+    public void custom_3d_cameraOnClick(){
+        startActivity(new Intent(getApplicationContext(), Custom3DCamera.class));
     }
 
     @OnClick(R.id.btn_load_model)

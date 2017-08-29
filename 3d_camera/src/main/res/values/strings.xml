@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">3d_camera</string>
+    <string name="distance_measure_btn_measure">开始测距</string>
+</resources>

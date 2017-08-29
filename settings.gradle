@@ -1,1 +1,1 @@
-include ':app', ':takephoto_library', ':custom_camera', ':3d_model_view'
+include ':app', ':takephoto_library', ':custom_camera', ':3d_model_view', ':3d_camera'

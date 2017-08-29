@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="custom_3d_camera_control_height">100dip</dimen>
+    <dimen name="custom_3d_camera_record_btn_size">80dip</dimen>
+</resources>

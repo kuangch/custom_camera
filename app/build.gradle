@@ -31,4 +31,5 @@ dependencies {
     compile project(':takephoto_library')
     compile project(':custom_camera')
     compile project(':3d_model_view')
+    compile project(':3d_camera')
 }
