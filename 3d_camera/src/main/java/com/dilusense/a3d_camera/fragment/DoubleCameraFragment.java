@@ -32,6 +32,8 @@ public class DoubleCameraFragment extends BaseFragment {
 
     @Override
     public void initEvent() {
+
+        rsv_record = mAct.rsv_record;
         rsv_record.setOnRecordButtonListener(new RecordStartView.OnRecordButtonListener() {
             @Override
             public void onStartRecord() {

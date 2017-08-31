@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">3d_camera</string>
     <string name="distance_measure_btn_measure">开始测距</string>
+
+    <string name="txt_camera">相机</string>
+    <string name="txt_scanner">3D扫描</string>
+    <string name="txt_measure">测距</string>
 </resources>

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="translucence">#5000</color>
+
+    <color name="page_txt_selected">#f1b701</color>
+    <color name="page_txt_lose_select">#fff</color>
 </resources>

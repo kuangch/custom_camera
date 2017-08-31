@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout >
+<layout>
     <data>
         <variable
             name="OC"
             type="com.dilusense.a3d_camera.databindings.model.OptionsControl"/>
-
-        <variable
-            name="View"
+        <import
             type="android.view.View"/>
     </data>
 
@@ -71,28 +68,28 @@
             <TextView
                 android:id="@+id/camera"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="相机"
-                android:textColor="@color/white"/>
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/txt_camera"
+                android:textColor="@{OC.showCamera ? @color/page_txt_selected : @color/page_txt_lose_select}"/>
 
             <TextView
                 android:id="@+id/scan"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dip"
-                android:layout_marginStart="10dip"
-                android:text="3d扫描仪"
-                android:textColor="@color/white"/>
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/custom_3d_camera_text_distance"
+                android:layout_marginStart="@dimen/custom_3d_camera_text_distance"
+                android:gravity="center"
+                android:text="@string/txt_scanner"
+                android:textColor="@{OC.showScanner ? @color/page_txt_selected : @color/page_txt_lose_select}"/>
 
             <TextView
                 android:id="@+id/measure"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="测距"
-                android:textColor="@color/white"/>
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/txt_measure"
+                android:textColor="@{OC.showMeasure ? @color/page_txt_selected : @color/page_txt_lose_select}"/>
         </LinearLayout>
     </RelativeLayout>
-
 </layout>
-
-

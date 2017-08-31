@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -59,7 +60,10 @@ public class Custom3DCamera extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         d = DataBindingUtil.setContentView(this, R.layout.act_custom_3d_camera);
-        optionsControl = new OptionsControl(false, true, false);
+
+        ButterKnife.bind(this);
+
+        optionsControl = new OptionsControl(false,true,false);
         d.setOC(optionsControl);
 
         pages.add(new SingleCameraFragment());
