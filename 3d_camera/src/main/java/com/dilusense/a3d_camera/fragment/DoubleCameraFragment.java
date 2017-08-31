@@ -21,7 +21,6 @@ import butterknife.BindView;
 
 public class DoubleCameraFragment extends BaseFragment {
 
-    @BindView(R2.id.rsv_record)
     RecordStartView rsv_record;
 
     @Override
@@ -52,7 +51,7 @@ public class DoubleCameraFragment extends BaseFragment {
     }
 
     @Override
-    public void initData() {
+    public void lazyLoad() {
 
     }
 }

@@ -33,7 +33,8 @@ public class DistanceMeasureFragment extends BaseFragment {
     }
 
     @Override
-    public void initData() {
+    protected void lazyLoad() {
 
     }
+
 }

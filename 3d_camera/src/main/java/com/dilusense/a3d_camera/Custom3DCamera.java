@@ -1,19 +1,27 @@
 package com.dilusense.a3d_camera;
 
-import android.app.Activity;
-import android.graphics.Color;
+import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewPager;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
+import android.widget.Button;
+import android.widget.ImageView;
 
-import com.dilusense.a3d_camera.adapter.MyPagerAdapter;
-import com.hy.libary.PagerTabIndicator;
+import com.dilusense.a3d_camera.databinding.ActCustom3dCameraBinding;
+import com.dilusense.a3d_camera.databindings.model.OptionsControl;
+import com.dilusense.a3d_camera.enums.Pages;
+import com.dilusense.a3d_camera.fragment.DistanceMeasureFragment;
+import com.dilusense.a3d_camera.fragment.DoubleCameraFragment;
+import com.dilusense.a3d_camera.fragment.SingleCameraFragment;
+import com.dilusense.a3d_camera.view.RecordStartView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Thinkpad on 2017/8/24.
@@ -21,59 +29,126 @@ import butterknife.ButterKnife;
 
 public class Custom3DCamera extends AppCompatActivity {
 
-    private DisplayMetrics dm; // 获取当前屏幕密度
+    public Pages currPage = Pages.SCANNER;
 
-    @BindView(R2.id.page_tab_indicator)
-    PagerTabIndicator page_tab_indicator;
+    public static final int TAKE_VIDEO_CODE = 1000;
+    public static final int TAKE_PHOTO_CODE = 1001;
 
-    @BindView(R2.id.pager)
-    ViewPager pager;
-    private MyPagerAdapter myPagerAdapter;
+    public static final String TAKE_VIDEO_PATH = "TAKE_VIDEO_PATH";
+    public static final String TAKE_PHOTO_PATH = "TAKE_PHOTO_PATH";
 
+    List<Fragment> pages = new ArrayList<Fragment>();
+
+    @BindView(R2.id.rsv_record)
+    public RecordStartView rsv_record;
+
+    @BindView(R2.id.id_iv_shutter)
+    public ImageView iv_shutter;
+
+    @BindView(R2.id.id_iv_change)
+    public ImageView iv_change;
+
+    @BindView(R2.id.btn_start_measure)
+    public Button btn_start_measure;
+
+
+    private ActCustom3dCameraBinding d;
+    private OptionsControl optionsControl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_custom_3d_camera);
+        d = DataBindingUtil.setContentView(this, R.layout.act_custom_3d_camera);
+        optionsControl = new OptionsControl(false, true, false);
+        d.setOC(optionsControl);
 
-        ButterKnife.bind(this);
+        pages.add(new SingleCameraFragment());
+        pages.add(new DoubleCameraFragment());
+        pages.add(new DistanceMeasureFragment());
 
-        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, pages.get(currPage.getValue()))
+                .commit();
+    }
 
-        pager.setAdapter(myPagerAdapter);
+    @OnClick(R2.id.camera)
+    public void cameraOnClick(){
+        changePage(Pages.CAMERA);
+    }
 
-        page_tab_indicator.setViewPager(pager);
+    @OnClick(R2.id.scan)
+    public void scanOnClick(){
+        changePage(Pages.SCANNER);
+    }
 
-        setTabsProperty();
+    @OnClick(R2.id.measure)
+    public void measureOnClick(){
+        changePage(Pages.MEASURE);
+    }
+
+    private void changePage(Pages newPage){
+        if(currPage == newPage){
+            return;
+        }
+        onControlCompatChange(newPage);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, pages.get(newPage.getValue()))
+                .commit();
+
+        currPage = newPage;
+    }
+
+
+    private void onControlCompatChange(Pages page){
+
+        switch (page){
+            case CAMERA:
+                optionsControl.setShowCamera(true);
+                break;
+            case SCANNER:
+                optionsControl.setShowScanner(true);
+                break;
+            case MEASURE:
+                optionsControl.setShowMeasure(true);
+                break;
+        }
 
     }
 
+    public void popBackStack() {
+        getSupportFragmentManager().popBackStack();
+    }
+
     /**
-     * 设置标签栏的属性以及状态
+     * 返回视频路径
+     * @param videoPath
      */
-    private void setTabsProperty() {
-        dm = getResources().getDisplayMetrics();
-        // 设置Tab Indicator的颜色
-        page_tab_indicator.setIndicatorColor(Color.TRANSPARENT);
-        // 设置Tab是自动填充满屏幕的
-        page_tab_indicator.setShouldExpand(true);
-        // 设置Tab的分割线是透明的
-        page_tab_indicator.setDividerColor(Color.TRANSPARENT);
-        // 设置Tab Indicator的高度
-        page_tab_indicator.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, dm));
-        // 设置Tab标题文字的大小
-        page_tab_indicator.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 13, dm));
-        // 设置Tab标题默认的颜色
-        page_tab_indicator.setTextColor(Color.GRAY);
-        // 设置选中Tab标题的颜色
-        page_tab_indicator.setSelectTextColor(Color.WHITE);
-         // 取消点击Tab时的背景色
-        page_tab_indicator.setTabBackground(Color.TRANSPARENT);
-        //选中的TextSize
-        page_tab_indicator.setSelectedTabTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 13, dm));
+    public void returnVideoPath(String videoPath) {
+        Intent data = new Intent();
+        data.putExtra(TAKE_VIDEO_PATH,videoPath);
+        if (getParent() == null) {
+            setResult(TAKE_VIDEO_CODE, data);
+        } else {
+            getParent().setResult(TAKE_VIDEO_CODE, data);
+        }
+        finish();
+    }
 
-        page_tab_indicator.setTabPaddingLeftRight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, dm));
-
+    /**
+     * 返回图片路径
+     * @param photoPath
+     */
+    public void returnPhotoPath(String photoPath) {
+        Intent data = new Intent();
+        data.putExtra(TAKE_PHOTO_PATH,photoPath);
+        if (getParent() == null) {
+            setResult(TAKE_PHOTO_CODE, data);
+        } else {
+            getParent().setResult(TAKE_PHOTO_CODE, data);
+        }
+        finish();
     }
 
 }

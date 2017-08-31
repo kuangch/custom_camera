@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout >
+    <data>
+        <variable
+            name="OC"
+            type="com.dilusense.a3d_camera.databindings.model.OptionsControl"/>
+
+        <variable
+            name="View"
+            type="android.view.View"/>
+    </data>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/custom_3d_camera_bottom_height"
+        android:layout_alignParentBottom="true"
+        android:background="@color/translucence">
+
+        <RelativeLayout
+            android:id="@+id/space"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/custom_3d_camera_control_height"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/id_iv_change"
+                android:layout_width="@dimen/custom_camera_btn_capture_wh"
+                android:layout_height="@dimen/custom_camera_btn_capture_wh"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:padding="15dp"
+                android:src="@drawable/custom_camera_change_selector"
+                android:visibility="@{OC.showCamera ? View.VISIBLE : View.GONE}"/>
+
+            <ImageView
+                android:id="@+id/id_iv_shutter"
+                android:layout_width="@dimen/custom_camera_btn_capture_wh"
+                android:layout_height="@dimen/custom_camera_btn_capture_wh"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/custom_camera_capture_selector"
+                android:visibility="@{OC.showCamera ? View.VISIBLE : View.GONE}"/>
+
+            <com.dilusense.a3d_camera.view.RecordStartView
+                android:id="@+id/rsv_record"
+                android:layout_width="@dimen/custom_3d_camera_record_btn_size"
+                android:layout_height="@dimen/custom_3d_camera_record_btn_size"
+                android:layout_centerInParent="true"
+                android:visibility="@{OC.showScanner ? View.VISIBLE : View.GONE}"
+                app:mRingMax="10000"/>
+
+            <Button
+                android:id="@+id/btn_start_measure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/distance_measure_btn_measure"
+                android:visibility="@{OC.showMeasure ? View.VISIBLE : View.GONE}"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/custom_3d_camera_text_height"
+            android:layout_centerHorizontal="true"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="相机"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dip"
+                android:layout_marginStart="10dip"
+                android:text="3d扫描仪"
+                android:textColor="@color/white"/>
+
+            <TextView
+                android:id="@+id/measure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="测距"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</layout>
+
+

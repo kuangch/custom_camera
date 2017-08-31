@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dilusense.a3d_camera.Custom3DCamera;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -17,8 +19,11 @@ import butterknife.Unbinder;
  */
 public abstract class BaseFragment extends Fragment {
 
+    protected boolean isInit = false;
+    protected boolean isLoad = false;
+
     private static final String TAG = "BaseFragment" ;
-    public FragmentActivity mAct;
+    public Custom3DCamera mAct;
     public View mContentView;
 
     private Unbinder unbinder;
@@ -32,7 +37,13 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContentView = initView(inflater,container,savedInstanceState);
+
         unbinder = ButterKnife.bind(this, mContentView);
+
+        isInit = true;
+        /*初始化的时候去加载数据**/
+        isCanLoadData();
+
         return mContentView;
     }
 
@@ -40,13 +51,15 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initEvent();
-        initData();
-        initLogic();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        isInit = false;
+        isLoad = false;
+
         if (unbinder != null){
             unbinder.unbind();
         }
@@ -58,11 +71,46 @@ public abstract class BaseFragment extends Fragment {
         Log.i(TAG,"destroy");
     }
 
-    public void init(){
-        this.mAct = getActivity();
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isCanLoadData();
+    }
+
+    /**
+     * 是否可以加载数据
+     * 可以加载数据的条件：
+     * 1.视图已经初始化
+     * 2.视图对用户可见
+     */
+    private void isCanLoadData() {
+        if (!isInit) {
+            return;
+        }
+
+        if (getUserVisibleHint()) {
+            lazyLoad();
+            isLoad = true;
+        } else {
+            if (isLoad) {
+                stopLoad();
+            }
+        }
+    }
+
+    private void init(){
+        this.mAct = (Custom3DCamera) getActivity();
     };
     public abstract View initView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState);
     public abstract void initEvent();
-    public abstract void initData();
-    public void initLogic(){};
+
+    /**
+     * 当视图初始化并且对用户可见的时候去真正的加载数据
+     */
+    protected abstract void lazyLoad();
+
+    /**
+     * 当视图已经对用户不可见并且加载过数据，如果需要在切换到其他页面时停止加载数据，可以覆写此方法
+     */
+    protected void stopLoad() {}
 }

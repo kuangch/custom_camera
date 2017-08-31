@@ -4,10 +4,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_alignParentBottom="true"
+    <com.dilusense.custom_camera.CameraPreview
+        android:id="@+id/camera_preview"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/custom_3d_camera_control_height">
-    </RelativeLayout>
+        android:layout_height="match_parent"
+        android:background="@android:color/white"/>
 
 </RelativeLayout>
