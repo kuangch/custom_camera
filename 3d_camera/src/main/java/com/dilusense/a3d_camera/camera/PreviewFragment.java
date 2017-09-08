@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +14,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.dilusense.a3d_camera.Custom3DCamera;
 import com.dilusense.a3d_camera.R;
+import com.dilusense.a3d_camera.fragment.BaseFragment;
 
 /**
  * 视频播放
  */
-public class PreviewFragment extends Fragment implements View.OnClickListener {
+public class PreviewFragment extends BaseFragment implements View.OnClickListener {
     public static final String TAG = PreviewFragment.class.getSimpleName();
     public static final int FILE_TYPE_VIDEO=0;
     public static final int FILE_TYPE_PHOTO = 1;
@@ -43,11 +43,18 @@ public class PreviewFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_preview, container, false);
-        initView(view);
-        return view;
+    public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_preview, container, false);
+    }
+
+    @Override
+    public void initEvent() {
+        initView(mContentView);
+    }
+
+    @Override
+    protected void lazyLoad() {
+
     }
 
     private void initView(View view) {
@@ -102,7 +109,6 @@ public class PreviewFragment extends Fragment implements View.OnClickListener {
             onCancel();
         }
     }
-
 
     /**
      * 取消

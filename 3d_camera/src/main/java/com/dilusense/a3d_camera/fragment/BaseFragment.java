@@ -68,12 +68,13 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i(TAG,"destroy");
+        Log.i(TAG, this.getClass().getSimpleName() + " destroy" );
     }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        Log.i(TAG, this.getClass().getSimpleName() + (isVisibleToUser ? " show" : " hide"));
         isCanLoadData();
     }
 
@@ -113,4 +114,38 @@ public abstract class BaseFragment extends Fragment {
      * 当视图已经对用户不可见并且加载过数据，如果需要在切换到其他页面时停止加载数据，可以覆写此方法
      */
     protected void stopLoad() {}
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, this.getClass().getSimpleName() + " onResume");
+
+        showHideOptionControl();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, this.getClass().getSimpleName() + " onPause");
+    }
+
+    // 判断是否是主页
+    private boolean isMainPage(){
+
+        for(Fragment fragment : mAct.pages){
+            if(fragment.getClass().getName().equals(this.getClass().getName()))
+                return true;
+        }
+        return false;
+    }
+
+    // 当前是主页显示底部操作区，否则隐藏
+    private void showHideOptionControl(){
+        if (isMainPage()){
+            mAct.optionsControl.setShow(true);
+        }else{
+            mAct.optionsControl.setShow(false);
+        }
+    }
 }

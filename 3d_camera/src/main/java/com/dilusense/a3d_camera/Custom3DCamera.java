@@ -5,7 +5,9 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -38,7 +40,7 @@ public class Custom3DCamera extends AppCompatActivity {
     public static final String TAKE_VIDEO_PATH = "TAKE_VIDEO_PATH";
     public static final String TAKE_PHOTO_PATH = "TAKE_PHOTO_PATH";
 
-    List<Fragment> pages = new ArrayList<Fragment>();
+    public List<Fragment> pages = new ArrayList<Fragment>();
 
     @BindView(R2.id.rsv_record)
     public RecordStartView rsv_record;
@@ -54,7 +56,8 @@ public class Custom3DCamera extends AppCompatActivity {
 
 
     private ActCustom3dCameraBinding d;
-    private OptionsControl optionsControl;
+    public OptionsControl optionsControl;
+    public FragmentManager fm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,15 +66,23 @@ public class Custom3DCamera extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        fm = getSupportFragmentManager();
+
         optionsControl = new OptionsControl(false,true,false);
         d.setOC(optionsControl);
+
+        fm.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                Log.i("test", "onBackStackChanged");
+            }
+        });
 
         pages.add(new SingleCameraFragment());
         pages.add(new DoubleCameraFragment());
         pages.add(new DistanceMeasureFragment());
 
-        getSupportFragmentManager()
-                .beginTransaction()
+        fm.beginTransaction()
                 .replace(R.id.fragment_container, pages.get(currPage.getValue()))
                 .commit();
     }
@@ -96,8 +107,8 @@ public class Custom3DCamera extends AppCompatActivity {
             return;
         }
         onControlCompatChange(newPage);
-        getSupportFragmentManager()
-                .beginTransaction()
+
+        fm.beginTransaction()
                 .replace(R.id.fragment_container, pages.get(newPage.getValue()))
                 .commit();
 
@@ -122,7 +133,7 @@ public class Custom3DCamera extends AppCompatActivity {
     }
 
     public void popBackStack() {
-        getSupportFragmentManager().popBackStack();
+        fm.popBackStack();
     }
 
     /**

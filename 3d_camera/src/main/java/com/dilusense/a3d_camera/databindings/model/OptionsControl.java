@@ -53,11 +53,24 @@ public class OptionsControl extends BaseObservable{
         this.showCamera = showCamera;
         this.showScanner = showScanner;
         this.showMeasure = showMeasure;
+
+        this.show =  true;
+    }
+
+    @Bindable
+    public boolean isShow() {
+        return show;
+    }
+
+    public void setShow(boolean show) {
+        this.show = show;
+        notifyChange();
     }
 
     private boolean showCamera;
     private boolean showScanner;
     private boolean showMeasure;
+    private boolean show;
 
 //    public final ObservableField<Boolean>  showCamera  = new ObservableField<>(false);
 //    public final ObservableField<Boolean>  showScanner  = new ObservableField<>(true);
