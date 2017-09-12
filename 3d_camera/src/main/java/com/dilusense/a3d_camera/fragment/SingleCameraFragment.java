@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,7 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
     private boolean safeToTakePicture = true;
     private Camera mCamera;
     private int cameraId = 0;
+    private int cameraId_other = 1;
 
     private WeakHandler handler;
 
@@ -48,6 +51,9 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
 
     @BindView(R2.id.camera_preview)
     CameraPreview mPreview;
+
+    @BindView(R2.id.camera_preview_other)
+    CameraPreview mPreview_other;
 
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,15 +81,12 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
             }
         });
 
-        cameraId = CameraUtils.getCameraId(mAct.getApplication(),CameraUtils.FRONT);
-
         mPreview.setOnGetCameraListener(new CameraPreview.IOnCameraGetListener() {
             @Override
             public void onGet(Camera camera) {
                 mCamera = camera;
             }
         });
-        mCamera = mPreview.init(mAct.getApplicationContext(),cameraId);
     }
 
     @Override
@@ -97,7 +100,13 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
         imgOutputUri = CaptureImgUtils.getCaptureImgFileUri(mAct.getApplicationContext());
         handler = new WeakHandler();
 
-        Log.d("CameraSurfaceView", "CameraSurfaceView onCreate currentThread : " + Thread.currentThread());
+        cameraId = CameraUtils.getCameraId(mAct.getApplication(),CameraUtils.FRONT);
+        cameraId_other = CameraUtils.getCameraId(mAct.getApplication(),CameraUtils.BACK);
+
+        Log.i(TAG, "init camera: " + cameraId);
+        mPreview.init(mAct.getApplicationContext(),cameraId);
+        Log.i(TAG, "init camera: " + cameraId_other);
+        mPreview_other.init(mAct.getApplicationContext(),cameraId_other,true);
 
     }
 

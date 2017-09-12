@@ -53,12 +53,20 @@ public class CameraPreview extends ViewGroup{
         return mHolder;
     }
 
-    public Camera init(Context context, final int cameraId) {
+    public void init(Context context, final int cameraId){
+        init(context,cameraId,false);
+    }
 
-        final Camera[] c = new Camera[1];
+    public void init(Context context, final int cameraId, boolean isTop) {
+
         mSurfaceView = new MyCameraSurfaceView(context);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         addView(mSurfaceView, layoutParams);
+
+        if (isTop){
+            mSurfaceView.setZOrderOnTop(true);
+        }
+
         mHolder = mSurfaceView.getHolder();
 
         mSurfaceView.setOnSurfaceCreatedListener(new BaseSurface.IOnSurfaceCreatedListener() {
@@ -80,7 +88,6 @@ public class CameraPreview extends ViewGroup{
         mSupportedPreviewSizes = mSurfaceView.mSupportedPreviewSizes;
 
         requestLayout();
-        return c[0];
     }
 
     @Override

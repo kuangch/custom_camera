@@ -1,6 +1,7 @@
 package com.dilusense.a3d_camera.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,11 +23,17 @@ public abstract class BaseFragment extends Fragment {
     protected boolean isInit = false;
     protected boolean isLoad = false;
 
-    private static final String TAG = "BaseFragment" ;
+    public static String TAG = "BaseFragment" ;
     public Custom3DCamera mAct;
     public View mContentView;
 
     private Unbinder unbinder;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        TAG = this.getClass().getName();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -4,4 +4,8 @@
     <dimen name="custom_3d_camera_text_height">30dip</dimen>
     <dimen name="custom_3d_camera_text_distance">15dip</dimen>
     <dimen name="custom_3d_camera_record_btn_size">80dip</dimen>
+
+    <dimen name="custom_3d_camera_preview_other_w">80dip</dimen>
+    <dimen name="custom_3d_camera_preview_other_h">120dip</dimen>
+    <dimen name="custom_3d_camera_preview_other_margin">5dip</dimen>
 </resources>

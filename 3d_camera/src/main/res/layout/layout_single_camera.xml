@@ -9,5 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"/>
+    <com.dilusense.a3d_camera.camera.CameraPreview
+        android:id="@+id/camera_preview_other"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/custom_3d_camera_preview_other_margin"
+        android:layout_marginTop="@dimen/custom_3d_camera_preview_other_margin"
+        android:layout_width="@dimen/custom_3d_camera_preview_other_w"
+        android:layout_height="@dimen/custom_3d_camera_preview_other_h"
+        android:background="@android:color/transparent"/>
 
 </RelativeLayout>

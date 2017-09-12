@@ -81,6 +81,7 @@ public class MyCameraSurfaceView extends BaseSurface{
 		try {
             mCamera = null;
             try {
+				Log.i(TAG, "open camera: " + cameraId);
                 mCamera = Camera.open(cameraId);//打开相机；在低版本里，只有open（）方法；高级版本加入此方法的意义是具有打开多个
                 //摄像机的能力，其中输入参数为摄像机的编号
                 //在manifest中设定的最小版本会影响这里方法的调用，如果最小版本设定有误（版本过低），在ide里将不允许调用有参的
@@ -104,7 +105,8 @@ public class MyCameraSurfaceView extends BaseSurface{
             }
             if (mCamera == null) {
                 Log.e("============", "摄像机为空");
-                System.exit(0);
+				return;
+//                System.exit(0);
             }
             Camera.Parameters parameters = mCamera.getParameters();
             parameters.setPreviewFormat(ImageFormat.NV21);
@@ -154,7 +156,8 @@ public class MyCameraSurfaceView extends BaseSurface{
 
 		Log.i(TAG, "start play");
 		preparePlay(cameraId);
-		mCamera.startPreview();// 开始预览，这步操作很重要
+		if(mCamera != null)
+			mCamera.startPreview();// 开始预览，这步操作很重要
 		playFlag = true;
 	}
 
