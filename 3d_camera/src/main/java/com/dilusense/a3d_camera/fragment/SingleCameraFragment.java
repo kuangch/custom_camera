@@ -15,10 +15,10 @@ import android.widget.Toast;
 import com.badoo.mobile.util.WeakHandler;
 import com.dilusense.a3d_camera.R;
 import com.dilusense.a3d_camera.R2;
+import com.dilusense.a3d_camera.camera.CameraPreview;
 import com.dilusense.a3d_camera.camera.CameraUtils;
 import com.dilusense.a3d_camera.camera.ImageUtils;
 import com.dilusense.a3d_camera.camera.PreviewFragment;
-import com.dilusense.custom_camera.CameraPreview;
 import com.dilusense.custom_camera.ImgClickBgSwitchUtils;
 import com.dilusense.custom_camera.utils.BitmapUtils;
 import com.dilusense.custom_camera.utils.CaptureImgUtils;
@@ -74,6 +74,16 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
                 changeCameraTwo();
             }
         });
+
+        cameraId = CameraUtils.getCameraId(mAct.getApplication(),CameraUtils.FRONT);
+
+        mPreview.setOnGetCameraListener(new CameraPreview.IOnCameraGetListener() {
+            @Override
+            public void onGet(Camera camera) {
+                mCamera = camera;
+            }
+        });
+        mCamera = mPreview.init(mAct.getApplicationContext(),cameraId);
     }
 
     @Override
@@ -85,30 +95,10 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
         }
 
         imgOutputUri = CaptureImgUtils.getCaptureImgFileUri(mAct.getApplicationContext());
-
         handler = new WeakHandler();
 
         Log.d("CameraSurfaceView", "CameraSurfaceView onCreate currentThread : " + Thread.currentThread());
-        cameraId = CameraUtils.getCameraId(mAct.getApplication(),CameraUtils.FRONT);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        startCamera(cameraId);
-        initCameraParameters();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        releaseCamera();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        releaseCamera();
     }
 
     /**
@@ -128,59 +118,12 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
         }
     }
 
-    private void startCamera(int cameraId) {
-        // Open the default i.e. the first rear facing camera.
-        try {
-            if (mCamera == null) {
-                mCamera = Camera.open(cameraId);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(mAct.getApplicationContext(), "启动照相机失败，请检查设备并打开权限", Toast.LENGTH_SHORT).show();
-        }
-        mPreview.setCamera(mCamera);
-
-    }
-
     void changeCameraTwo() {
         //切换前后摄像头
-        int cameraCount = 0;
-        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
-        Camera.CameraInfo currCameraInfo = new Camera.CameraInfo();
-        cameraCount = Camera.getNumberOfCameras();//得到摄像头的个数
-        for (int i = 0; i < cameraCount; i++) {
-            Camera.getCameraInfo(i, cameraInfo);//得到每一个摄像头的信息
-            Camera.getCameraInfo(cameraId, currCameraInfo); // 当前摄像头信息
-            if (currCameraInfo.facing != cameraInfo.facing) {
-                cameraId = i;
-                break;
-            }
-        }
-        try {
-            mCamera.stopPreview();//停掉原来摄像头的预览
-            releaseCamera();
-            mCamera = Camera.open(cameraId);//打开当前选中的摄像头
-
-            mCamera.setPreviewDisplay(mPreview.getLouisSurfaceHolder());//通过surfaceview显示取景画面
-//                mCamera.setDisplayOrientation(90); //
-            mPreview.setCamera(mCamera);
-
-            mCamera.startPreview();//开始预览
-            initCameraParameters();
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        if(mPreview != null)
+            mPreview.changeCamera();
     }
 
-    void initCameraParameters(){
-        if(mCamera != null){
-            Camera.Parameters p = mCamera.getParameters();
-//            initFocusParams(p);
-            mCamera.setParameters(p);
-        }
-    }
 
 //    void initFocusParams(Camera.Parameters params) {
 //        //若支持连续对焦模式，则使用.
@@ -219,19 +162,6 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
 //        Context ctx = mAct.getApplication();
 //        ImgClickBgSwitchUtils.onClick(ctx, iv_shutter, R.drawable.camera_capture_normal, R.drawable.camera_capture_pressed);
 //    }
-
-    /**
-     * 释放mCamera
-     */
-    private void releaseCamera() {
-        // Because the Camera object is a shared resource, it's very
-        // important to release it when the activity is paused.
-        if (mCamera != null) {
-            mPreview.setCamera(null);
-            mCamera.release();
-            mCamera = null;
-        }
-    }
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {

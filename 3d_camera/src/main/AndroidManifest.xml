@@ -11,6 +11,7 @@
 
         <activity
             android:name=".Custom3DCamera"
+            android:screenOrientation="portrait"
             android:theme="@style/MyFullScreenStyle" >
         </activity>
 
