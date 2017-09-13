@@ -30,9 +30,6 @@ public class MyCameraSurfaceView extends BaseSurface{
 	private Camera mCamera;
 	private int cameraId;
 
-	public List<Camera.Size> mSupportedPreviewSizes;
-	public List<Camera.Size> mSupportedPictureSizes;
-
 	public MyCameraSurfaceView(Context paramContext) {
 		super(paramContext);
 
@@ -52,6 +49,11 @@ public class MyCameraSurfaceView extends BaseSurface{
 	public void surfaceChanged(SurfaceHolder paramSurfaceHolder, int paramInt1,
                                int paramInt2, int paramInt3) {
 
+		if (onSurfaceChangeListener != null){
+			onSurfaceChangeListener.onChange(mCamera);
+		}
+		startPlay();
+
 	}
 
 	public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
@@ -63,7 +65,7 @@ public class MyCameraSurfaceView extends BaseSurface{
 		if(cameraId == -1){
 			return;
 		}
-		startPlay();
+		preparePlay(cameraId);
 	}
 
 	public void surfaceDestroyed(SurfaceHolder paramSurfaceHolder) {
@@ -88,16 +90,18 @@ public class MyCameraSurfaceView extends BaseSurface{
                 //open方法;
                 //如果模拟器版本较高的话，无参的open方法将会获得null值!所以尽量使用通用版本的模拟器和API；
 
-				if (onCameraCreatedListener != null)
-					onCameraCreatedListener.onCreated(mCamera);
-				mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
-				mSupportedPictureSizes = mCamera.getParameters().getSupportedPictureSizes();
+				List<Size> mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
+				List<Size> mSupportedPictureSizes = mCamera.getParameters().getSupportedPictureSizes();
 				for (Camera.Size size : mSupportedPreviewSizes) {
-					Log.d(TAG, "Preview for mPreviewSize w - h : " + size.width + " - " + size.height);
+					Log.d(TAG, "support for mPreviewSize w - h : " + size.width + " - " + size.height);
 				}
 				for (Camera.Size size : mSupportedPictureSizes) {
-					Log.d(TAG, "Preview for mPictureSize w - h : " + size.width + " - " + size.height);
+					Log.d(TAG, "support for mPictureSize w - h : " + size.width + " - " + size.height);
 				}
+
+				if (onCameraCreatedListener != null)
+					onCameraCreatedListener.onCreated(mCamera, mSupportedPreviewSizes,mSupportedPictureSizes);
+
 				mCamera.setDisplayOrientation(90);
 			} catch (Exception e) {
                 Log.e("============", "摄像头被占用");
@@ -111,7 +115,12 @@ public class MyCameraSurfaceView extends BaseSurface{
             Camera.Parameters parameters = mCamera.getParameters();
             parameters.setPreviewFormat(ImageFormat.NV21);
             /*这是唯一值，也可以不设置。有些同学可能设置成 PixelFormat 下面的一个值，其实是不对的，具体的可以看官方文档*/
-            setPreViewSize(parameters);
+//            setPreViewSize(parameters);
+			CAMERA_WIDTH = parameters.getPreviewSize().width;
+			CAMERA_HEIGHT = parameters.getPreviewSize().height;
+
+			Log.d(TAG, "Preview size w - h : " + CAMERA_WIDTH + " - " + CAMERA_HEIGHT);
+
             mCamera.setParameters(parameters);
 			mCamera.setPreviewDisplay(holder);//设置显示面板控制器
 
@@ -128,26 +137,26 @@ public class MyCameraSurfaceView extends BaseSurface{
         }
 	}
 
-	private void setPreViewSize(Parameters parameters) {
-		// TODO Auto-generated method stub
+//	private void setPreViewSize(Parameters parameters) {
+//		// TODO Auto-generated method stub
+////		Size previewSize = parameters.getPreviewSize();
 //		Size previewSize = parameters.getPreviewSize();
-		Size previewSize = parameters.getPreviewSize();
-		CAMERA_WIDTH = previewSize.width;
-        CAMERA_HEIGHT = previewSize.height;
-
-		if(CAMERA_WIDTH <= 640){
-			List<Size> supportedSizes = parameters.getSupportedPreviewSizes();
-	        for(Size size : supportedSizes){
-	        	Log.i(TAG, "supportedSizes: w:" + size.width + " h:"+size.height);
-	        	if(size.width - CAMERA_WIDTH > 50 && size.width - CAMERA_WIDTH < 300);
-	        	CAMERA_WIDTH = previewSize.width;
-	            CAMERA_HEIGHT = previewSize.height;
-	        }
-		}
-        if(logToggle)
-        	Log.i(TAG, "setPreviewSize: w:" + CAMERA_WIDTH + " h:" + CAMERA_HEIGHT);
-        parameters.setPreviewSize(CAMERA_WIDTH, CAMERA_HEIGHT);
-	}
+//		CAMERA_WIDTH = previewSize.width;
+//        CAMERA_HEIGHT = previewSize.height;
+//
+//		if(CAMERA_WIDTH <= 640){
+//			List<Size> supportedSizes = parameters.getSupportedPreviewSizes();
+//	        for(Size size : supportedSizes){
+//	        	Log.i(TAG, "supportedSizes: w:" + size.width + " h:"+size.height);
+//	        	if(size.width - CAMERA_WIDTH > 50 && size.width - CAMERA_WIDTH < 300);
+//	        	CAMERA_WIDTH = previewSize.width;
+//	            CAMERA_HEIGHT = previewSize.height;
+//	        }
+//		}
+//        if(logToggle)
+//        	Log.i(TAG, "setPreviewSize: w:" + CAMERA_WIDTH + " h:" + CAMERA_HEIGHT);
+//        parameters.setPreviewSize(CAMERA_WIDTH, CAMERA_HEIGHT);
+//	}
 
 	/**
 	 * 时间如水2013-7-10
@@ -155,7 +164,7 @@ public class MyCameraSurfaceView extends BaseSurface{
 	public void startPlay() {
 
 		Log.i(TAG, "start play");
-		preparePlay(cameraId);
+//		preparePlay(cameraId);
 		if(mCamera != null)
 			mCamera.startPreview();// 开始预览，这步操作很重要
 		playFlag = true;
@@ -256,6 +265,7 @@ public class MyCameraSurfaceView extends BaseSurface{
 		}
 		
 		stopPlay();
+		preparePlay(cameraId);
 		startPlay();
 		
 		return true;

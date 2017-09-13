@@ -49,15 +49,13 @@ public class CameraPreview extends ViewGroup{
 //        init(context);
     }
 
-    public SurfaceHolder getLouisSurfaceHolder() {
-        return mHolder;
-    }
-
     public void init(Context context, final int cameraId){
         init(context,cameraId,false);
     }
 
     public void init(Context context, final int cameraId, boolean isTop) {
+
+        final View previewView = this;
 
         mSurfaceView = new MyCameraSurfaceView(context);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -78,16 +76,32 @@ public class CameraPreview extends ViewGroup{
 
         mSurfaceView.setOnCameraCreatedListener(new BaseSurface.IOnCameraCreatedListener() {
             @Override
-            public void onCreated(Camera camera) {
-                   if(onGetCameraListener != null)
-                       onGetCameraListener.onGet(camera);
+            public void onCreated(Camera camera, List<Camera.Size> mSupportPreview, List<Camera.Size> mPicturePreview) {
+                mSupportedPreviewSizes = mSupportPreview;
+                mSupportedPictureSizes = mPicturePreview;
+
+                previewView.requestLayout();
+
+                if(onGetCameraListener != null)
+                    onGetCameraListener.onGet(camera);
+            }
+
+        });
+
+        mSurfaceView.setOnSurfaceChangeListener(new BaseSurface.IOnSurfaceChangeListener() {
+            @Override
+            public void onChange(Camera camera) {
+                // set surfaceview preview size and size of picture
+                if (mPreviewSize != null && mPictureSize != null) {
+                    Camera.Parameters parameters = camera.getParameters();
+                    parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+                    parameters.setPictureSize(mPictureSize.width, mPictureSize.height);
+                    camera.setParameters(parameters);
+                }
             }
         });
 
-        mSupportedPictureSizes = mSurfaceView.mSupportedPictureSizes;
-        mSupportedPreviewSizes = mSurfaceView.mSupportedPreviewSizes;
-
-        requestLayout();
+        this.requestLayout();
     }
 
     @Override
@@ -102,11 +116,11 @@ public class CameraPreview extends ViewGroup{
         if (mSupportedPreviewSizes != null) {
             // 需要宽高切换 因为相机有90度的角度
             mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, height, width);
-            Log.d(TAG, "Preview mPreviewSize w - h : " + mPreviewSize.width + " - " + mPreviewSize.height);
+//            Log.d(TAG, "Preview mPreviewSize w - h : " + mPreviewSize.width + " - " + mPreviewSize.height);
         }
         if (mSupportedPictureSizes != null) {
             mPictureSize = getOptimalPreviewSize(mSupportedPictureSizes, height, width);
-            Log.d(TAG, "Preview mPictureSize w - h : " + mPictureSize.width + " - " + mPictureSize.height);
+//            Log.d(TAG, "Preview mPictureSize w - h : " + mPictureSize.width + " - " + mPictureSize.height);
         }
 
     }
