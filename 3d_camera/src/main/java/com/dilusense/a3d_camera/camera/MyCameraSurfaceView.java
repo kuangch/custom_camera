@@ -52,8 +52,6 @@ public class MyCameraSurfaceView extends BaseSurface{
 		if (onSurfaceChangeListener != null){
 			onSurfaceChangeListener.onChange(mCamera);
 		}
-		startPlay();
-
 	}
 
 	public void surfaceCreated(SurfaceHolder paramSurfaceHolder) {
@@ -93,10 +91,10 @@ public class MyCameraSurfaceView extends BaseSurface{
 				List<Size> mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
 				List<Size> mSupportedPictureSizes = mCamera.getParameters().getSupportedPictureSizes();
 				for (Camera.Size size : mSupportedPreviewSizes) {
-					Log.d(TAG, "support for mPreviewSize w - h : " + size.width + " - " + size.height);
+					Log.d(TAG, "support for mPreviewSize w - h : " + this.getId() + " : "+ size.width + " - " + size.height);
 				}
 				for (Camera.Size size : mSupportedPictureSizes) {
-					Log.d(TAG, "support for mPictureSize w - h : " + size.width + " - " + size.height);
+					Log.d(TAG, "support for mPictureSize w - h : "  + this.getId() + " : "+ size.width + " - " + size.height);
 				}
 
 				if (onCameraCreatedListener != null)
@@ -116,10 +114,6 @@ public class MyCameraSurfaceView extends BaseSurface{
             parameters.setPreviewFormat(ImageFormat.NV21);
             /*这是唯一值，也可以不设置。有些同学可能设置成 PixelFormat 下面的一个值，其实是不对的，具体的可以看官方文档*/
 //            setPreViewSize(parameters);
-			CAMERA_WIDTH = parameters.getPreviewSize().width;
-			CAMERA_HEIGHT = parameters.getPreviewSize().height;
-
-			Log.d(TAG, "Preview size w - h : " + CAMERA_WIDTH + " - " + CAMERA_HEIGHT);
 
             mCamera.setParameters(parameters);
 			mCamera.setPreviewDisplay(holder);//设置显示面板控制器
@@ -165,8 +159,17 @@ public class MyCameraSurfaceView extends BaseSurface{
 
 		Log.i(TAG, "start play");
 //		preparePlay(cameraId);
-		if(mCamera != null)
+		if (playFlag) {
+			Log.i(TAG, "is already playing");
+			return;
+		}
+		if(mCamera != null) {
+			Camera.Parameters parameters = mCamera.getParameters();
+			CAMERA_WIDTH = parameters.getPreviewSize().width;
+			CAMERA_HEIGHT = parameters.getPreviewSize().height;
+			Log.d(TAG, "Preview size startPlay w - h : " + CAMERA_WIDTH + " - " + CAMERA_HEIGHT);
 			mCamera.startPreview();// 开始预览，这步操作很重要
+		}
 		playFlag = true;
 	}
 
@@ -266,7 +269,7 @@ public class MyCameraSurfaceView extends BaseSurface{
 		
 		stopPlay();
 		preparePlay(cameraId);
-		startPlay();
+//		startPlay();
 		
 		return true;
 	}

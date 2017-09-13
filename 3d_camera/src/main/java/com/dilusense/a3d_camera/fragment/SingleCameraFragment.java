@@ -1,12 +1,9 @@
 package com.dilusense.a3d_camera.fragment;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,15 +18,11 @@ import com.dilusense.a3d_camera.camera.CameraPreview;
 import com.dilusense.a3d_camera.camera.CameraUtils;
 import com.dilusense.a3d_camera.camera.ImageUtils;
 import com.dilusense.a3d_camera.camera.PreviewFragment;
-import com.dilusense.custom_camera.ImgClickBgSwitchUtils;
 import com.dilusense.custom_camera.utils.BitmapUtils;
 import com.dilusense.custom_camera.utils.CaptureImgUtils;
 import com.dilusense.custom_camera.utils.Utils;
 
-import java.io.IOException;
-
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by Thinkpad on 2017/8/24.
@@ -77,7 +70,7 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
         iv_change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeCameraTwo();
+                changeCamera();
             }
         });
 
@@ -127,50 +120,17 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
         }
     }
 
-    void changeCameraTwo() {
+    void changeCamera() {
         //切换前后摄像头
-        if(mPreview != null)
+        if(mPreview != null){
+            if(mPreview_other != null){
+                mPreview.stopCamera();
+                mPreview_other.changeCamera();
+            }
             mPreview.changeCamera();
+        }
+
     }
-
-
-//    void initFocusParams(Camera.Parameters params) {
-//        //若支持连续对焦模式，则使用.
-//        List<String> focusModes = params.getSupportedFocusModes();
-//        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
-//            params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-//            mCamera.setParameters(params);
-//        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
-//            //进到这里，说明不支持连续对焦模式，退回到点击屏幕进行一次自动对焦.
-//            params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-//            mCamera.setParameters(params);
-//            //点击屏幕进行一次自动对焦.
-//            mPreview.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    mCamera.autoFocus(null);
-//                }
-//            });
-//            //4秒后进行第一次自动对焦，之后每隔8秒进行一次自动对焦.
-//            Observable.timer(4, TimeUnit.SECONDS).flatMap(new Func1<Long, Observable<?>>() {
-//                @Override
-//                public Observable<?> call(Long aLong) {
-//                    mCamera.autoFocus(null);
-//                    return Observable.interval(8, TimeUnit.SECONDS);
-//                }
-//            }).subscribe(new Action1<Object>() {
-//                @Override
-//                public void call(Object aLong) {
-//                    mCamera.autoFocus(null);
-//                }
-//            });
-//        }
-//    }
-
-//    private void initBigImageShowResource(){
-//        Context ctx = mAct.getApplication();
-//        ImgClickBgSwitchUtils.onClick(ctx, iv_shutter, R.drawable.camera_capture_normal, R.drawable.camera_capture_pressed);
-//    }
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
@@ -180,7 +140,7 @@ public class SingleCameraFragment extends BaseFragment implements Camera.Picture
             return;
         }
 
-        Log.d("CameraSurfaceView", "CameraSurfaceView onPictureTaken data.length : " + data.length);
+        Log.d("SingleCameraFragment", "CameraSurfaceView onPictureTaken data.length : " + data.length);
 
         // 保存图片
         final byte[] b = data;

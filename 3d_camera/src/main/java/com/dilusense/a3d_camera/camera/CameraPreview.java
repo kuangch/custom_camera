@@ -17,8 +17,10 @@ import java.util.List;
  * <p/>
  */
 public class CameraPreview extends ViewGroup{
-    private final String TAG = "Preview";
+    private final String TAG = "CameraPreview";
     private IOnCameraGetListener onGetCameraListener;
+
+    private Camera mCamera;
 
     /**
      * 图片的偏移
@@ -77,13 +79,16 @@ public class CameraPreview extends ViewGroup{
         mSurfaceView.setOnCameraCreatedListener(new BaseSurface.IOnCameraCreatedListener() {
             @Override
             public void onCreated(Camera camera, List<Camera.Size> mSupportPreview, List<Camera.Size> mPicturePreview) {
+
+                mCamera = camera;
+
                 mSupportedPreviewSizes = mSupportPreview;
                 mSupportedPictureSizes = mPicturePreview;
 
-                previewView.requestLayout();
-
                 if(onGetCameraListener != null)
                     onGetCameraListener.onGet(camera);
+
+                previewView.requestLayout();
             }
 
         });
@@ -91,17 +96,32 @@ public class CameraPreview extends ViewGroup{
         mSurfaceView.setOnSurfaceChangeListener(new BaseSurface.IOnSurfaceChangeListener() {
             @Override
             public void onChange(Camera camera) {
-                // set surfaceview preview size and size of picture
-                if (mPreviewSize != null && mPictureSize != null) {
-                    Camera.Parameters parameters = camera.getParameters();
-                    parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
-                    parameters.setPictureSize(mPictureSize.width, mPictureSize.height);
-                    camera.setParameters(parameters);
-                }
+//                setCameraPreviewSize(camera);
             }
         });
 
         this.requestLayout();
+    }
+
+    public void stopCamera(){
+        if(mSurfaceView != null){
+            mSurfaceView.stopPlay();
+        }
+    }
+
+    private void setCameraPreviewSize(MyCameraSurfaceView mSurfaceView, Camera camera, Camera.Size mPreviewSize, Camera.Size mPictureSize) {
+        // set surfaceview preview size and size of picture
+        if (mPreviewSize != null && mPictureSize != null) {
+
+            Log.d(TAG, "Preview size onChange w - h : "+ this.getId() + " : " + mPreviewSize.width + " - " + mPreviewSize.height);
+            Camera.Parameters parameters = camera.getParameters();
+            parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+            parameters.setPictureSize(mPictureSize.width, mPictureSize.height);
+            camera.setParameters(parameters);
+
+            if (mSurfaceView != null && !mSurfaceView.playFlag)
+                mSurfaceView.startPlay();
+        }
     }
 
     @Override
@@ -112,17 +132,16 @@ public class CameraPreview extends ViewGroup{
         final int width = resolveSize(getSuggestedMinimumWidth(), widthMeasureSpec);
         final int height = resolveSize(getSuggestedMinimumHeight(), heightMeasureSpec);
         setMeasuredDimension(width, height);
-        Log.d(TAG, "Preview w - h : " + width + " - " + height);
+        Log.d(TAG, "Preview w - h : " + this.getId() +" : " + width + " - " + height);
         if (mSupportedPreviewSizes != null) {
             // 需要宽高切换 因为相机有90度的角度
             mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, height, width);
-//            Log.d(TAG, "Preview mPreviewSize w - h : " + mPreviewSize.width + " - " + mPreviewSize.height);
+            Log.d(TAG, "Preview size preview w - h : " + this.getId() +" : " + mPreviewSize.width + " - " + mPreviewSize.height);
         }
         if (mSupportedPictureSizes != null) {
             mPictureSize = getOptimalPreviewSize(mSupportedPictureSizes, height, width);
-//            Log.d(TAG, "Preview mPictureSize w - h : " + mPictureSize.width + " - " + mPictureSize.height);
+            Log.d(TAG, "Preview size picture w - h : "+ this.getId() +" : " + mPictureSize.width + " - " + mPictureSize.height);
         }
-
     }
 
     @Override
@@ -164,6 +183,9 @@ public class CameraPreview extends ViewGroup{
             }
 
         }
+
+        // 重新绘制布局后设置相机预览大小
+        setCameraPreviewSize(mSurfaceView,mCamera,mPreviewSize, mPictureSize);
     }
 
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
