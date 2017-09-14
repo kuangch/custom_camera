@@ -119,7 +119,7 @@ public class CameraPreview extends ViewGroup{
             parameters.setPictureSize(mPictureSize.width, mPictureSize.height);
             camera.setParameters(parameters);
 
-            if (mSurfaceView != null && !mSurfaceView.playFlag)
+            if (mSurfaceView != null)
                 mSurfaceView.startPlay();
         }
     }
@@ -221,10 +221,11 @@ public class CameraPreview extends ViewGroup{
         return optimalSize;
     }
 
-    public void changeCamera(){
+    public boolean changeCamera(){
         if (mSurfaceView != null){
-            mSurfaceView.changeCamera();
+            return mSurfaceView.changeCamera();
         }
+        return false;
     }
 
     // camera created
