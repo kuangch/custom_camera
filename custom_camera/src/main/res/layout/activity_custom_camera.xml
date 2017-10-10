@@ -5,88 +5,11 @@
                 android:layout_height="fill_parent"
                 android:background="@color/transparent_gray">
 
-    <com.dilusense.custom_camera.CameraPreview
-        android:id="@+id/camera_preview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"/>
-
-    <ImageView
-        android:id="@+id/iv_camera_face_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <RelativeLayout
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/id_iv_flash_switch"
-            android:layout_width="@dimen/custom_camera_btn_config_wh"
-            android:layout_height="@dimen/custom_camera_btn_config_wh"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:padding="15dp"
-            android:src="@drawable/camera_flash_off"
-            />
-
-        <ImageView
-            android:id="@+id/id_iv_change"
-            android:layout_width="@dimen/custom_camera_btn_config_wh"
-            android:layout_height="@dimen/custom_camera_btn_config_wh"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:padding="15dp"
-            android:src="@drawable/custom_camera_change_selector"
-            />
-
-        <ImageView
-            android:id="@+id/id_preview_iv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/option"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/custom_camera_options_btn_h"
-        android:layout_alignParentBottom="true">
-
-        <ImageView
-            android:id="@+id/id_iv_shutter"
-            android:layout_width="@dimen/custom_camera_btn_capture_wh"
-            android:layout_height="@dimen/custom_camera_btn_capture_wh"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
-
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="@dimen/custom_camera_btn_back_wh"
-            android:layout_height="@dimen/custom_camera_btn_back_wh"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/custom_camera_btn_capture_back_distance"
-            android:layout_toLeftOf="@id/id_iv_shutter"
-            android:src="@drawable/camera_cancel"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/option">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:padding="15dip"
-            android:text="@string/custom_camera_capture_note"
-            android:textColor="@color/white"
-            android:textSize="@dimen/custom_camera_capture_note_font_size"
-            />
-    </RelativeLayout>
+    </FrameLayout>
 
 </RelativeLayout>

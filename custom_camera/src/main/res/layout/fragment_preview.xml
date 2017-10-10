@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/photo_play"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <VideoView
+        android:id="@+id/video_play"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <ImageView
+        android:id="@+id/video_cancel"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="40dp"
+        android:src="@drawable/custom_camera_back_selector"
+        android:layout_width="@dimen/custom_camera_btn_save_cancel_wh"
+        android:layout_height="@dimen/custom_camera_btn_save_cancel_wh" />
+
+    <ImageView
+        android:id="@+id/video_use"
+        android:layout_margin="40dp"
+        android:src="@drawable/custom_camera_save_selector"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_width="@dimen/custom_camera_btn_save_cancel_wh"
+        android:layout_height="@dimen/custom_camera_btn_save_cancel_wh" />
+
+</RelativeLayout>
